@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku</title>
+    <link rel="stylesheet" href="/styles/indexStyle.css">
+</head>
+<body>
+    <header>
+        <h1>Sudoku Nacional</h1>
+        <nav>
+            <div class="menu">
+                <label for="partida">Partida</label>
+                <select id="partida">
+                    <option>Nueva partida</option>
+                    <option>Guardar partida</option>
+                    <option>Cargar partida</option>
+                </select>
+            </div>
+            <div class="usuario">
+                <span id="nombreUsuario">Usuario</span>
+                <div class="dropdown">
+                    <a href="#">Mejores tiempos</a>
+                    <a href="#">Cerrar sesión</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="bandera verde"></div>
+        <div id="bandera blanco" class="tablero">
+            <table>
+                <tbody>
+                    <tr>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="arriba0"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="arriba01"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td>
+                    </tr>
+                    <tr id="arriba1">
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="arriba11"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="arriba12"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td>
+                    </tr>
+                    <tr id="arriba2">
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="arriba22"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="arriba21"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td>
+                    </tr>
+                    <tr id="medio">
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="medio0"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="medio01"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td>
+                    </tr>
+                    <tr id="medio1">
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="medio11"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="medio12"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td>
+                    </tr>
+                    <tr id="medio2">
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="medio22"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="medio21"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td>
+                    </tr>
+                    <tr id="abajo">
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="abajo0"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="abajo01"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td>
+                    </tr>
+                    <tr id="abajo1">
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="abajo11"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="abajo12"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td>
+                    </tr>
+                    <tr id="abajo2">
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="abajo22"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td id="abajo21"><input type="text" maxlength="1"></td>
+                        <td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td><td><input type="text" maxlength="1"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="bandera rojo"></div>
+        <div class="botones">
+            <button id="validar">Validar</button>
+            <button id="limpiar">Limpiar</button>
+        </div>
+    </main>
+</body>
+</html>

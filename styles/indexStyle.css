@@ -1,0 +1,368 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: linear-gradient(to right, green 33.3%, white 33.3%, white 66.6%, red 66.6%);
+    color: black;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.bandera, #bandera{    
+    position: absolute;
+    width: 33.33%;
+    height: 100%;
+    animation: wave-animation 5s infinite ease-in-out;
+}
+
+.bandera.verde{
+    background-color: green;
+    left:  0;
+}
+
+.bandera.blanco{
+    background-color: white;
+    left: 33.33%;
+}
+
+.bandera.rojo{
+    background-color: red;
+    top: 18%;
+    left: 66.66%;
+}
+
+@keyframes wave-animation {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-10px);
+    }
+    50% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(10px);
+    }
+}
+
+nav {
+    display: flex;
+    gap: 20px;
+    
+}
+
+.menu select {
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+}
+
+.usuario {
+    position: relative;
+    cursor: pointer;
+    padding: 10px;
+    background: #444;
+    border-radius: 5px;
+}
+
+.usuario span {
+    color: white;
+}
+
+.usuario .dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+    width: 150px;
+}
+
+.usuario:hover .dropdown {
+    display: block;
+}
+
+.dropdown a {
+    display: block;
+    padding: 10px;
+    color: black;
+    text-decoration: none;
+    background: white;
+}
+
+.dropdown a:hover {
+    background-color: #ddd;
+}
+
+.tablero {
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+    padding: 10px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+}
+
+table {
+    border-collapse: collapse;
+    background: #fff;
+}
+
+td {
+    width: 40px;
+    height: 40px;
+    border: 5px solid black;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+tr {
+    width: 40px;
+    height: 40px;
+    border: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+
+#medio {
+    width: 40px;
+    height: 40px;
+    border-top: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#abajo {
+    width: 40px;
+    height: 40px;
+    border-top: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#arriba0 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#arriba01 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#arriba11 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#arriba12 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#arriba22 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#arriba21 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#medio0 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#medio01 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#medio11 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#medio12 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#medio22 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#medio21 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#abajo0 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#abajo01 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#abajo11 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#abajo12 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#abajo22 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+#abajo21 {
+    width: 40px;
+    height: 40px;
+    border-right: 10px solid blue;
+    text-align: center;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+td input {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 18px;
+    border: none;
+    outline: none;
+}
+
+input:focus{
+    background-color:rgba(39, 223, 39, 0.535);
+}
+
+.botones {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+#validar {
+    background-color: #28a745;
+    color: white;
+}
+
+#validar:hover {
+    background-color: #218838;
+}
+
+#limpiar {
+    background-color: #dc3545;
+    color: white;
+}
+
+#limpiar:hover {
+    background-color: #c82333;
+}
