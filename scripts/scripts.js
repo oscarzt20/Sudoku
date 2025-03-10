@@ -56,6 +56,21 @@ function clearBoard()
     }
 }
 
+function validateBoard() {
+    let board = [...document.querySelectorAll("#sudokuBoard input")].map(input => +input.value || 0);
+    let valid = i => new Set(board.slice(i, i + 9).filter(n => n)).size === board.slice(i, i + 9).filter(n => n).length;
+    let box = i => [0, 1, 2, 9, 10, 11, 18, 19, 20].map(x => board[i + x]).filter(n => n);
+    
+    for (let i = 0; i < 9; i++) {
+        if (!valid(i * 9) || !valid(i) || new Set(box((i % 3) * 3 + Math.floor(i / 3) * 27)).size !== box((i % 3) * 3 + Math.floor(i / 3) * 27).length) {
+            return alert("El Sudoku no es válido");
+        }
+    }
+    alert("El Sudoku es válido");
+}
+
+
 // Se llama a la función
 createBoardPage();
 clearButton.addEventListener("click", clearBoard);
+validateButton.addEventListener("click", validateBoard);
