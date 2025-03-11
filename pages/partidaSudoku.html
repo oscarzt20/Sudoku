@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku</title>
+    <link rel="stylesheet" href="/styles/indexStyle.css">
+    <script src="/scripts/scripts.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Sudoku Nacional</h1>
+        <nav>
+            <div class="menu">
+                <label for="partida">Partida</label>
+                <select id="partida">
+                    <option>Nueva partida</option>
+                    <option>Guardar partida</option>
+                    <option>Cargar partida</option>
+                </select>
+            </div>
+            <div class="usuario">
+                <span id="nombreUsuario">Usuario</span>
+                <div class="dropdown">
+                    <a href="/pages/login.html">Cerrar sesión</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="bandera verde"></div>
+        <div id="bandera blanco" class="tablero">
+            <table id="sudokuBoard"></table>
+        </div>
+        <div class="bandera rojo"></div>
+        <div class="botones">
+            <button id="nuevaPartida">Nueva Partida</button>
+            <button id="validateButton">Validar</button>
+            <button id="clearBoard">Limpiar</button>
+        </div>
+    </main>
+</body>
+</html>
