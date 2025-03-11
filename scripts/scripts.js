@@ -57,18 +57,47 @@ function clearBoard()
 }
 
 function validateBoard() {
-    let board = [...document.querySelectorAll("#sudokuBoard input")].map(input => +input.value || 0);
-    let valid = i => new Set(board.slice(i, i + 9).filter(n => n)).size === board.slice(i, i + 9).filter(n => n).length;
-    let box = i => [0, 1, 2, 9, 10, 11, 18, 19, 20].map(x => board[i + x]).filter(n => n);
+    let board = Array.from(document.querySelectorAll("#sudokuBoard input"))
+        .map(input => +input.value || 0);
     
+    if (board.includes(0)) {
+        return alert("El Sudoku no está completo");
+    }
+
+    const isValidSet = nums => {
+        let filtered = nums.filter(n => n !== 0);
+        return new Set(filtered).size === filtered.length;
+    };
+
+    // Validar filas y columnas
     for (let i = 0; i < 9; i++) {
-        if (!valid(i * 9) || !valid(i) || new Set(box((i % 3) * 3 + Math.floor(i / 3) * 27)).size !== box((i % 3) * 3 + Math.floor(i / 3) * 27).length) {
+        let row = [], col = [];
+        for (let j = 0; j < 9; j++) {
+            row.push(board[i * 9 + j]);
+            col.push(board[j * 9 + i]);
+        }
+        if (!isValidSet(row) || !isValidSet(col)) {
             return alert("El Sudoku no es válido");
         }
     }
-    alert("El Sudoku es válido");
-}
 
+    // Validar subcuadrículas de 3x3
+    for (let i = 0; i < 9; i++) {
+        let box = [];
+        let startRow = Math.floor(i / 3) * 3;
+        let startCol = (i % 3) * 3;
+        for (let r = 0; r < 3; r++) {
+            for (let c = 0; c < 3; c++) {
+                box.push(board[(startRow + r) * 9 + (startCol + c)]);
+            }
+        }
+        if (!isValidSet(box)) {
+            return alert("El Sudoku no es válido");
+        }
+    }
+
+    alert("El Sudoku es válido y completo");
+}
 
 // Se llama a la función
 createBoardPage();
