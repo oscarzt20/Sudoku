@@ -2,9 +2,9 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: 'Roboto';
-}
-
-body {
+  }
+  
+  body {
     background: url('/images/mexico_login.jpg') no-repeat center center fixed;
     background-size: cover;
     display: flex;
@@ -12,23 +12,23 @@ body {
     align-items: center;
     color: #003366;
     text-align: center;
-}
-
-/* Header */
-header {
+  }
+  
+  /* Header */
+  header {
     width: 100%;
     padding: 15px 0;
     font-size: 1.5rem;
     font-weight: bold;
     color: #006400;
-}
-
-h1 {
+  }
+  
+  h1 {
     margin: 0;
-}
-
-/* Main */
-.login {
+  }
+  
+  /* Main */
+  .login {
     background: white;
     padding: 30px 10px;
     border-radius: 10px;
@@ -36,28 +36,21 @@ h1 {
     max-width: 400px;
     margin-top: 40px;
     border: 2px solid #006400;
-}
-
-.login h2 {
+  }
+  
+  .login h2 {
     margin-top: 0;
     margin-bottom: 30px;
-}
-
-.login p {
+  }
+  
+  .login p {
     font-size: 1.2rem;
     font-weight: bold;
     margin: 15px 0 10px;
     color: #003366;
-}
-
-.login p:last-child {
-    font-size: 1rem;
-    font-weight: bold;
-    margin: 15px 0 10px;
-    color: #003366;
-}
-
-.login input {
+  }
+  
+  .login input {
     width: 70%;
     padding: 10px;
     margin-bottom: 5px;
@@ -66,9 +59,9 @@ h1 {
     font-size: 1rem;
     background: white;
     color: #003366;
-}
-
-.login button {
+  }
+  
+  .login button {
     background-color: #ff0000;
     color: white;
     padding: 10px;
@@ -79,24 +72,24 @@ h1 {
     font-size: 1.2rem;
     font-weight: bold;
     margin-top: 15px;
-}
-
-.login button:hover {
+  }
+  
+  .login button:hover {
     background-color: #cc0000;
-}
-
-.login a {
+  }
+  
+  .login a {
     color: #006400;
     text-decoration: none;
     font-weight: bold;
-}
-
-.login a:hover {
+  }
+  
+  .login a:hover {
     text-decoration: underline;
-}
-
-/* Footer */
-footer {
+  }
+  
+  /* Footer */
+  footer {
     width: 100%;
     padding: 0;
     text-align: center;
@@ -104,4 +97,5 @@ footer {
     font-weight: bold;
     color: #006400;
     margin-top: 20px;
-}
+  }
+  
