@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/styles/indexStyle.css">
     <script src="/scripts/scripts.js" defer></script>
     <script src="/scripts/btnNuevaPartida.js" defer></script>
+    <script src="/scripts/sudokuGameScript.js" defer></script>
 </head>
 <body>
     <header>
@@ -16,8 +17,8 @@
                 <label for="partida">Partida</label>
                 <select id="partida">
                     <option>Nueva partida</option>
-                    <option>Guardar partida</option>
-                    <option>Cargar partida</option>
+                    <option onclick="saveGameState()">Guardar partida</option>
+                    <option onclick="loadGameState()">Cargar partida</option>
                 </select>
             </div>
             <div class="usuario">
