@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 session_start();
-include "./dbConnection.php";
+include "dbConnection.php";
 
 if (!isset($_SESSION['IDUser'])) {
     echo json_encode(['success' => false, 'error' => 'Usuario no autenticado.']);
@@ -9,75 +9,42 @@ if (!isset($_SESSION['IDUser'])) {
 }
 
 $userId = $_SESSION['IDUser'];
+$action = $_POST['action'] ?? '';
+$boardData = $_POST['board'] ?? '';
+$gameId = $_POST['id'] ?? null;
 
-function saveState($conn, $userId, $boardData)
-{
-    try {
-        if (!$boardData) {
-            return ['success' => false, 'error' => 'No se recibieron datos del tablero.'];
-        }
-
-        $query = "INSERT INTO sudoku_boards (IDUser, board_data) VALUES (?, ?)";
-        $stmt = $conn->prepare($query);
-
-        if (!$stmt) {
-            return ['success' => false, 'error' => 'Error al preparar la consulta: ' . $conn->error];
-        }
-
-        $boardJson = json_encode($boardData);
-        $stmt->bind_param("is", $userId, $boardJson);
-
-        if (!$stmt->execute()) {
-            return ['success' => false, 'error' => 'Error al guardar el tablero: ' . $stmt->error];
-        }
-
-        $stmt->close();
-        return ['success' => true, 'message' => 'Tablero guardado exitosamente.'];
-    } catch (Exception $e) {
-        return ['success' => false, 'error' => 'Error interno del servidor: ' . $e->getMessage()];
-    }
-}
-
-function loadState($conn, $userId)
-{
-    try {
-        $query = "SELECT board_data FROM sudoku_boards WHERE IDUser = ?";
-        $stmt = $conn->prepare($query);
-
-        if (!$stmt) {
-            return ['success' => false, 'error' => 'Error al preparar la consulta: ' . $conn->error];
-        }
-
-        $stmt->bind_param("i", $userId);
-        $stmt->execute();
-        $boardData = null;
-        $stmt->bind_result($boardData);
-
-        if ($stmt->fetch()) {
-            $stmt->close();
-            return ['success' => true, 'board' => $boardData ? json_decode($boardData, true) : null];
-        } else {
-            $stmt->close();
-            return ['success' => false, 'error' => 'No se encontró ningún tablero guardado.'];
-        }
-    } catch (Exception $e) {
-        return ['success' => false, 'error' => 'Error interno del servidor: ' . $e->getMessage()];
-    }
-}
-
-// Manejo de la petición
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    if ($_POST['action'] === 'save') {
-        $result = saveState($conn, $userId, $_POST['board']);
-        echo json_encode($result);
-    } elseif ($_POST['action'] === 'load') {
-        $result = loadState($conn, $userId);
-        echo json_encode($result);
+if ($action === 'save') {
+    $stmt = $connection->prepare("INSERT INTO sudoku_boards (IDUser, board_data) VALUES (?, ?)");
+    $stmt->bind_param("is", $userId, $boardData);
+    if ($stmt->execute()) {
+        echo json_encode(['success' => true, 'message' => '✅ Partida guardada correctamente.']);
     } else {
-        echo json_encode(['success' => false, 'error' => 'Acción no válida.']);
+        echo json_encode(['success' => false, 'error' => 'Error al guardar la partida: ' . $stmt->error]);
     }
+    $stmt->close();
+} elseif ($action === 'load') {
+    $stmt = $connection->prepare("SELECT board_data FROM sudoku_boards WHERE IDSudoku = ? AND IDUser = ?");
+    $stmt->bind_param("ii", $gameId, $userId);
+    $stmt->execute();
+    $stmt->bind_result($board);
+    if ($stmt->fetch()) {
+        echo json_encode(['success' => true, 'board' => json_decode($board, true)]);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'No se encontró la partida.']);
+    }
+    $stmt->close();
+} elseif ($action === 'update') {
+    $stmt = $connection->prepare("UPDATE sudoku_boards SET board_data = ? WHERE IDSudoku = ? AND IDUser = ?");
+    $stmt->bind_param("sii", $boardData, $gameId, $userId);
+    if ($stmt->execute()) {
+        echo json_encode(['success' => true, 'message' => '✅ Partida actualizada correctamente.']);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Error al actualizar la partida: ' . $stmt->error]);
+    }
+    $stmt->close();
 } else {
-    echo json_encode(['success' => false, 'error' => 'Petición no válida.']);
+    echo json_encode(['success' => false, 'error' => 'Acción no válida.']);
 }
-$conn->close();
+
+$connection->close();
 ?>

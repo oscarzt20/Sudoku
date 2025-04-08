@@ -1,4 +1,3 @@
-
 let sudokuBoard = document.getElementById("sudokuBoard");
 let clearButton = document.getElementById("clearBoard");
 
@@ -8,33 +7,31 @@ const defaultBoard = [[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0
 // Función para crear la tabla del sudoku
 function createBoardPage()
 {
-    // Se limpian los datos
     sudokuBoard.innerHTML = "";
 
-    // for que crea cada celda en la tabla del sudoku
-    // Se itera sobre las filas primero
     for(let i = 0; i < 9; i++)
     {
-        // Se insertan las filas
         const row = sudokuBoard.insertRow();
 
-        // Se iteran las columnas
         for(let j = 0; j < 9; j++)
         {
-            // Se añaden celdas a la tabla y se le da un estilo a la celda
             const cell = row.insertCell(j);
             cell.style.border = '1px solid black';
 
-            // Se crean los input y se le da estilo
             const input = document.createElement("input");
             input.style.width = "50px";
             input.style.height = "50px";
             input.style.textAlign = "center";
+            input.maxLength = 1;
 
-            // Se le van asignando los valores de nuestra matriz
             input.value = defaultBoard[i][j] === 0 ? "" : defaultBoard[i][j];
-            // input.disabled = defaultBoard[i][j] === 0 ? false : true;
             input.disabled = defaultBoard[i][j] !== 0;
+
+            if (!input.disabled) {
+                input.addEventListener("input", function () {
+                    this.value = this.value.replace(/[^1-9]/g, '');
+                });
+            }
 
             cell.appendChild(input);
             row.appendChild(cell);
@@ -69,7 +66,6 @@ function validateBoard() {
         return new Set(filtered).size === filtered.length;
     };
 
-    // Validar filas y columnas
     for (let i = 0; i < 9; i++) {
         let row = [], col = [];
         for (let j = 0; j < 9; j++) {
@@ -81,7 +77,6 @@ function validateBoard() {
         }
     }
 
-    // Validar subcuadrículas de 3x3
     for (let i = 0; i < 9; i++) {
         let box = [];
         let startRow = Math.floor(i / 3) * 3;
@@ -99,7 +94,6 @@ function validateBoard() {
     alert("El Sudoku es válido y completo");
 }
 
-// Se llama a la función
 createBoardPage();
 clearButton.addEventListener("click", clearBoard);
 validateButton.addEventListener("click", validateBoard);

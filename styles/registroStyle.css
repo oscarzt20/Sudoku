@@ -4,14 +4,14 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: url('/images/catrina-background.jpg');
+    background-image: url('../images/catrina-background.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
 .bloque {
-    background-image: url('/images/bandera-registro.jpg');
+    background-image: url('../images/bandera-registro.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

@@ -1,15 +1,21 @@
 <?php
-// Variables necesarias para la BD
-$host     = "localhost";
-$user     = "root";
+// Mostrar errores en desarrollo
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+$host = "127.0.0.1";
+$user = "root";
 $password = "";
 $database = "logindb";
 
-// Crear la conexión a la base de datos
+// Crear conexión
 $connection = new mysqli($host, $user, $password, $database);
 
-// Verificar si hay error en la conexión
+// Verificar conexión
 if ($connection->connect_error) {
-    die("Connection failed: " . $connection->connect_error);
+    http_response_code(500);
+    echo json_encode(["status" => "Failed", "message" => "Error en la conexión: " . $connection->connect_error]);
+    exit;
 }
 ?>

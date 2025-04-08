@@ -1,38 +1,34 @@
 <?php
-// Se incluye la conexión a la BD
-include "./dbConnection.php";
+session_start();
+include "dbConnection.php";
 
-// Función para iniciar sesión
 function login($email, $password) {
     global $connection;
 
-    // Preparar la consulta
-    $selectQuery = $connection->prepare("SELECT name, password FROM users WHERE email = ?");
-    $selectQuery->bind_param("s", $email);
-    $selectQuery->execute();
-    $result = $selectQuery->get_result();
+    $stmt = $connection->prepare("SELECT ID_User, name, password FROM user WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    // Verificar si se encontró el usuario
-    if ($result->num_rows > 0) {
+    if ($result && $result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
-        // Se valida la contraseña usando password_verify
         if (password_verify($password, $user["password"])) {
+            // Guardamos los datos del usuario en sesión
+            $_SESSION["IDUser"] = $user["ID_User"];
+            $_SESSION["Name"] = $user["name"];
+
             return ["status" => "Successful", "message" => "Login exitoso"];
         }
     }
 
-    // En caso de fallo
-    return ["status" => "Failed", "message" => "Login fallido"];
+    return ["status" => "Failed", "message" => "Credenciales inválidas"];
 }
 
-// Procesar la petición POST
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["action"]) && $_POST["action"] === "login") {
-    // Se reciben y sanitizan los parámetros
-    $email = isset($_POST["email"]) ? trim($_POST["email"]) : "";
-    $password = isset($_POST["password"]) ? trim($_POST["password"]) : "";
+    $email = trim($_POST["email"] ?? "");
+    $password = trim($_POST["password"] ?? "");
 
-    // Se retorna la respuesta en JSON
     echo json_encode(login($email, $password));
 }
 ?>

@@ -1,61 +1,55 @@
 <?php
-header('Content-Type: application/json');
-// Se incluye la conexión a la BD
-include "./dbConnection.php";
+// Mostrar errores SOLO en desarrollo
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-// Recoger datos del formulario y sanitizarlos
-$username = isset($_POST['username']) ? trim($_POST['username']) : "";
-$email = isset($_POST['email']) ? trim($_POST['email']) : "";
-$password = isset($_POST['password']) ? trim($_POST['password']) : "";
-$confirmPassword = isset($_POST['confirm-password']) ? trim($_POST['confirm-password']) : "";
+// Encabezado para JSON
+header('Content-Type: application/json');
+
+// Incluir conexión a la BD
+require_once "dbConnection.php";
+
+// Recoger y limpiar datos del formulario
+$username = trim($_POST['username'] ?? '');
+$email = trim($_POST['email'] ?? '');
+$password = trim($_POST['password'] ?? '');
+$confirmPassword = trim($_POST['confirm-password'] ?? '');
 
 $errores = [];
 
 // Validaciones
-if (empty($username)) {
-    $errores[] = 'El nombre de usuario es obligatorio.';
-}
+if (empty($username)) $errores[] = "El nombre de usuario es obligatorio.";
 if (empty($email)) {
-    $errores[] = 'El correo electrónico es obligatorio.';
+    $errores[] = "El correo electrónico es obligatorio.";
 } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $errores[] = 'El formato del correo electrónico no es válido.';
+    $errores[] = "Formato de correo inválido.";
 }
-if (empty($password)) {
-    $errores[] = 'La contraseña es obligatoria.';
-} elseif (strlen($password) < 8) {
-    $errores[] = 'La contraseña debe tener al menos 8 caracteres.';
-}
-if ($password !== $confirmPassword) {
-    $errores[] = 'Las contraseñas no coinciden.';
-}
+if (empty($password)) $errores[] = "La contraseña es obligatoria.";
+elseif (strlen($password) < 8) $errores[] = "La contraseña debe tener al menos 8 caracteres.";
+if ($password !== $confirmPassword) $errores[] = "Las contraseñas no coinciden.";
 
-// Verificar si el correo ya existe en la tabla users
+// Validar existencia previa del correo
 if (empty($errores)) {
-    $sql_check_email = "SELECT COUNT(*) as count FROM users WHERE email = ?";
-    $stmt = $connection->prepare($sql_check_email);
+    $stmt = $connection->prepare("SELECT COUNT(*) as count FROM user WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-
-    if ($row['count'] > 0) {
-        $errores[] = 'El correo electrónico ya está registrado.';
+    if ($result->fetch_assoc()['count'] > 0) {
+        $errores[] = "El correo electrónico ya está registrado.";
     }
 }
 
-// Si existen errores, se devuelve la respuesta en JSON
+// Si hay errores, se responde en JSON
 if (!empty($errores)) {
     echo json_encode(["status" => "Failed", "message" => implode(" ", $errores)]);
-    $connection->close();
     exit;
 }
 
-// Si no hay errores, proceder con el registro
-$contrasenaEncriptada = password_hash($password, PASSWORD_DEFAULT);
-
-$sql_insert = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-$stmt = $connection->prepare($sql_insert);
-$stmt->bind_param("sss", $username, $email, $contrasenaEncriptada);
+// Insertar en la base de datos
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+$stmt = $connection->prepare("INSERT INTO user (name, email, password) VALUES (?, ?, ?)");
+$stmt->bind_param("sss", $username, $email, $hashedPassword);
 
 if ($stmt->execute()) {
     echo json_encode(["status" => "Successful", "message" => "Cuenta creada exitosamente."]);

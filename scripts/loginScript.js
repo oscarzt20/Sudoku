@@ -6,7 +6,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   const password = document.getElementById("password").value;
 
   // Se envían los datos vía POST al endpoint PHP encargado del login
-  const response = await fetch("/php/login.php", {
+  const response = await fetch("../php/login.php", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: `action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
@@ -28,7 +28,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   // Si el login es exitoso, esperar 2 segundos y redirigir a la partida
   if (result.status === "Successful") {
     setTimeout(() => {
-      window.location.href = "/pages/partidaSudoku.html";
+      window.location.href = "../pages/partidaSudoku.html";
     }, 1000);
   }
 });

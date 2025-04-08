@@ -1,55 +1,139 @@
+function tablaAJson() {
+    const tabla = document.getElementById('sudokuBoard');
+    const filas = tabla.getElementsByTagName('tr');
+    const tablero = [];
+
+    for (let i = 0; i < filas.length; i++) {
+        const celdasFila = filas[i].getElementsByTagName('td');
+        const fila = [];
+        for (let j = 0; j < celdasFila.length; j++) {
+            const input = celdasFila[j].querySelector('input');
+            const valor = input && input.value ? parseInt(input.value) : 0;
+            fila.push(valor);
+        }
+        tablero.push(fila);
+    }
+    return JSON.stringify(tablero);
+}
+
+function llenarTablero(board) {
+    const tabla = document.getElementById('sudokuBoard');
+    tabla.innerHTML = '';
+
+    for (let i = 0; i < 9; i++) {
+        const fila = document.createElement('tr');
+        for (let j = 0; j < 9; j++) {
+            const celda = document.createElement('td');
+            const input = document.createElement('input');
+            input.maxLength = 1;
+            input.style.width = "50px";
+            input.style.height = "50px";
+            input.style.textAlign = "center";
+
+            const valor = board[i][j];
+            if (valor !== 0 && valor !== null) {
+                input.value = valor;
+                input.disabled = true;
+            } else {
+                input.value = '';
+                input.disabled = false;
+                input.addEventListener("input", function () {
+                    this.value = this.value.replace(/[^1-9]/g, '');
+                });
+            }
+
+            celda.appendChild(input);
+            fila.appendChild(celda);
+        }
+        tabla.appendChild(fila);
+    }
+}
+
+function saveGameState() {
+    const id = prompt("Escribe el ID de la partida a guardar (deja vacío para nueva partida):");
+    const tableroJson = tablaAJson();
+    const action = id ? 'update' : 'save';
+
+    fetch("../php/SudokuState.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `action=${action}&board=${encodeURIComponent(tableroJson)}${id ? '&id=' + id : ''}`
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+            } else {
+                alert("❌ Error: " + data.error);
+            }
+        })
+        .catch(() => alert("❌ Error de red al guardar."));
+}
+
+function loadGameState() {
+    const id = prompt("Escribe el ID de la partida que deseas cargar:");
+    if (!id) return;
+
+    fetch("../php/SudokuState.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `action=load&id=${id}`
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                llenarTablero(data.board);
+                alert("✅ Partida cargada correctamente.");
+            } else {
+                alert("❌ Error: " + data.error);
+            }
+        })
+        .catch(() => alert("❌ Error de red al cargar."));
+}
+
 function nuevaPartida() {
     const dificultad = prompt("Selecciona la dificultad: Fácil, Medio o Difícil").toLowerCase();
-    let casillasVacias;
-
-    switch (dificultad) {
-        case "fácil":
-            casillasVacias = 31;
-            break;
-        case "medio":
-            casillasVacias = 40;
-            break;
-        case "difícil":
-            casillasVacias = 45;
-            break;
-        default:
-            alert("Opción inválida. Selecciona Fácil, Medio o Difícil.");
-            return;
+    let casillasVacias = { "fácil": 30, "medio": 40, "difícil": 50 }[dificultad];
+    if (casillasVacias === undefined) {
+        alert("❌ Opción inválida");
+        return;
     }
-
     generarTablero(casillasVacias);
 }
 
 function generarTablero(casillasVacias) {
-    let sudokuBoard = document.getElementById("sudokuBoard");
-    sudokuBoard.innerHTML = ""; // Limpia el tablero
+    const solucion = generarSudokuResuelto();
+    const tablero = ocultarCasillas(solucion, casillasVacias);
+    const tabla = document.getElementById('sudokuBoard');
+    tabla.innerHTML = '';
 
-    let solucionCompleta = generarSudokuResuelto(); // Genera un tablero de Sudoku resuelto
-    let tableroConHuecos = ocultarCasillas(solucionCompleta, casillasVacias);
-
-    // Genera la tabla visual
     for (let i = 0; i < 9; i++) {
-        let row = document.createElement("tr");
+        const fila = document.createElement('tr');
         for (let j = 0; j < 9; j++) {
-            let cell = document.createElement("td");
-            let input = document.createElement("input");
-            input.type = "text";
+            const celda = document.createElement('td');
+            const input = document.createElement('input');
             input.maxLength = 1;
+            input.style.width = "50px";
+            input.style.height = "50px";
+            input.style.textAlign = "center";
 
-            if (tableroConHuecos[i][j] !== 0) {
-                input.value = tableroConHuecos[i][j];
+            if (tablero[i][j] !== 0) {
+                input.value = tablero[i][j];
                 input.disabled = true;
+            } else {
+                input.addEventListener("input", function () {
+                    this.value = this.value.replace(/[^1-9]/g, '');
+                });
             }
 
-            cell.appendChild(input);
-            row.appendChild(cell);
+            celda.appendChild(input);
+            fila.appendChild(celda);
         }
-        sudokuBoard.appendChild(row);
+        tabla.appendChild(fila);
     }
 }
 
 function generarSudokuResuelto() {
-    // Genera un tablero resuelto básico (para simplicidad, este es un tablero fijo, pero se puede mejorar con un generador aleatorio)
     return [
         [5, 3, 4, 6, 7, 8, 9, 1, 2],
         [6, 7, 2, 1, 9, 5, 3, 4, 8],
@@ -64,129 +148,22 @@ function generarSudokuResuelto() {
 }
 
 function ocultarCasillas(tablero, cantidad) {
-    let nuevoTablero = tablero.map(row => row.slice());
-
-    let casillasOcultas = 0;
-    while (casillasOcultas < cantidad) {
-        let fila = Math.floor(Math.random() * 9);
-        let columna = Math.floor(Math.random() * 9);
-
-        if (nuevoTablero[fila][columna] !== 0) {
-            nuevoTablero[fila][columna] = 0;
-            casillasOcultas++;
+    let nuevo = tablero.map(row => row.slice());
+    let ocultadas = 0;
+    while (ocultadas < cantidad) {
+        let i = Math.floor(Math.random() * 9);
+        let j = Math.floor(Math.random() * 9);
+        if (nuevo[i][j] !== 0) {
+            nuevo[i][j] = 0;
+            ocultadas++;
         }
     }
-
-    return nuevoTablero;
+    return nuevo;
 }
 
-const fs = require('fs');
-const path = require('path');
-
-const saveFilePath = path.join(__dirname, 'sudokuProgress.json');
-
-function tablaAJson() {
-    const tabla = document.getElementById('sudokuBoard');
-    const filas = tabla.getElementsByTagName('tr');
-    const tablero = [];
-
-    for (let i = 0; i < filas.length; i++) {
-        const celdasFila = filas[i].getElementsByTagName('td');
-        const fila = [];
-        for (let j = 0; j < celdasFila.length; j++) {
-            const input = celdasFila[j].querySelector('input');
-            const valor = input ? parseInt(input.value) : null;
-            fila.push(valor);
-        }
-        tablero.push(fila);
-    }
-    return JSON.stringify(tablero);
-}
-
-// Function to save the current game state to a JSON file
-function saveGameState() {
-    const tableroJson = tablaAJson();
-
-    fetch('tu_script_php.php', { // Reemplaza 'tu_script_php.php' con el nombre de tu archivo PHP
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded' // Importante para enviar datos como formulario
-        },
-        body: 'action=save&board=' + encodeURIComponent(tableroJson) // Enviar la acción y el tablero JSON
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log('Tablero guardado con éxito:', data.message);
-                // Muestra un mensaje al usuario (por ejemplo, actualiza la interfaz)
-            } else {
-                console.error('Error al guardar el tablero:', data.error);
-                // Muestra un mensaje de error al usuario
-            }
-        })
-        .catch(error => console.error('Error de red:', error));
-}
-
-// Function to load the game state from the JSON file
-function loadGameState() {
-    fetch('tu_script_php.php', { // Reemplaza 'tu_script_php.php' con el nombre de tu archivo PHP
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded' // Importante para enviar datos como formulario
-        },
-        body: 'action=load' // Enviar solo la acción 'load'
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log('Tablero cargado:', data.board);
-                // Actualiza la interfaz con data.board (por ejemplo, llena los inputs de la tabla)
-                llenarTablero(data.board); // Llamar a una función para llenar el tablero
-            } else {
-                console.error('Error al cargar el tablero:', data.error);
-                // Muestra un mensaje de error al usuario
-            }
-        })
-        .catch(error => console.error('Error de red:', error));
-}
-
-function llenarTablero(board) {
-    const tabla = document.getElementById('sudokuBoard');
-    const filas = tabla.getElementsByTagName('tr');
-
-    for (let i = 0; i < filas.length; i++) {
-        const celdasFila = filas[i].getElementsByTagName('td');
-        for (let j = 0; j < celdasFila.length; j++) {
-            const input = celdasFila[j].querySelector('input');
-            if (input) {
-                input.value = board[i][j] !== null ? board[i][j] : '';
-            }
-        }
-    }
-}
-
-// Example usage
-const exampleBoard = [
-    [5, 3, null, null, 7, null, null, null, null],
-    [6, null, null, 1, 9, 5, null, null, null],
-    [null, 9, 8, null, null, null, null, 6, null],
-    [8, null, null, null, 6, null, null, null, 3],
-    [4, null, null, 8, null, 3, null, null, 1],
-    [7, null, null, null, 2, null, null, null, 6],
-    [null, 6, null, null, null, null, 2, 8, null],
-    [null, null, null, 4, 1, 9, null, null, 5],
-    [null, null, null, null, 8, null, null, 7, 9]
-];
-
-const selectorPartida = document.getElementById("partida");
-
-selectorPartida.addEventListener("change", (event) => {
-    const valorSeleccionado = event.target.value;
-
-    if (valorSeleccionado === "nuevaPartida")
-        nuevaPartida();
-    else if (valorSeleccionado === "guardarPartida")
-        saveGameState();
-    else if (valorSeleccionado === "cargarPartida")
-        loadGameState();
+document.getElementById("partida").addEventListener("change", (e) => {
+    const val = e.target.value;
+    if (val === "nuevaPartida") nuevaPartida();
+    else if (val === "guardarPartida") saveGameState();
+    else if (val === "cargarPartida") loadGameState();
 });

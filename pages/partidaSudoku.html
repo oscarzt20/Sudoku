@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sudoku</title>
-    <link rel="stylesheet" href="/styles/indexStyle.css">
-    <script src="/scripts/scripts.js" defer></script>
-    <script src="/scripts/selectorPartidas.js" defer></script>
+    <link rel="stylesheet" href="../styles/indexStyle.css">
+    <script src="../scripts/scripts.js" defer></script>
+    <script src="../scripts/selectorPartidas.js" defer></script>
 </head>
 <body>
     <header>
@@ -15,15 +15,17 @@
             <div class="menu">
                 <label for="partida">Partida</label>
                 <select id="partida">
+                    <option value="">Selecionar</option>
                     <option value="nuevaPartida">Nueva partida</option>
-                    <option" value="guardarPartida">Guardar partida</option>
-                    <option" value="cargarPartida">Cargar partida</option>
+                    <option value="guardarPartida">Guardar partida</option>
+                    <option value="cargarPartida">Cargar partida</option>
+                   
                 </select>
             </div>
             <div class="usuario">
                 <span id="nombreUsuario">Usuario</span>
                 <div class="dropdown">
-                    <a href="/pages/login.html">Cerrar sesión</a>
+                    <a href="login.html">Cerrar sesión</a>
                 </div>
             </div>
         </nav>
