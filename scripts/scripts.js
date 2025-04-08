@@ -1,4 +1,4 @@
-// Variable que representa la tabla del sudoku
+
 let sudokuBoard = document.getElementById("sudokuBoard");
 let clearButton = document.getElementById("clearBoard");
 
