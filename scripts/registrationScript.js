@@ -8,7 +8,7 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
     const confirm  = document.getElementById("confirm-password").value;
   
     // Enviar datos vía POST al endpoint PHP encargado del registro
-    const response = await fetch("/php/registerAcc.php", {
+    const response = await fetch("./php/registerAcc.php", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&confirm-password=${encodeURIComponent(confirm)}`
